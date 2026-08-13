@@ -133,6 +133,23 @@ at least four characters; results are limited to 500 by default. Prefer
 `--fqdn`, `--path`, or `--query`, use a timeframe, and add `--limit` when a
 smaller result set is sufficient.
 
+## SHA-1 Bloom filters
+
+`shatashabloom.py` builds a local probabilistic index from a table's
+`content_digest` column, then checks SHA-1 values without querying the service.
+The filter targets a 0.1% false-positive rate.
+Configure ClickHouse with `CCWGET_CLICKHOUSE_HOST`, `CCWGET_CLICKHOUSE_PORT`,
+`CCWGET_CLICKHOUSE_DATABASE`, `CCWGET_CLICKHOUSE_USER`, and
+`CCWGET_CLICKHOUSE_PASSWORD`.
+
+```bash
+python shatashabloom.py -build CCMAIN2026XX
+python shatashabloom.py -sha 67df35fd332c2956c96771fd68a75680de5df4a4
+```
+
+The query prints `Maybe Present` or `Absent`. Bloom filters can return false
+positives, so `Maybe Present` requires confirmation with a normal SHA-1 search.
+
 ## Troubleshooting and diagnostics
 
 ```bash
