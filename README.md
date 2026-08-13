@@ -3,20 +3,21 @@
 CCWget is a lightweight Python client for searching and retrieving archived web
 objects from a CIRCL Common Crawl indexing service.
 
-![CCWget logo](assets/ccwget-logo.png)
+<img src="assets/ccwget-logo.png" alt="CCWget logo" width="314">
 
 ## Why CCWget exists
 
 [Common Crawl](https://commoncrawl.org/) publishes large, openly available web
 crawls. Each indexed record can contain the URL, crawl timestamp, response
-metadata, content digest, and the WARC filename plus byte range needed to
+metadata, content digest, and the [WARC](https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1-annotated/)
+filename plus byte range needed to
 retrieve the archived response.
 
 The dataset is useful for historical and security investigations, but its size
 makes downloading complete crawl collections impractical. CCWget queries the
-service-side metadata index first, then retrieves only the selected WARC object.
-The client does not need ClickHouse credentials and does not download complete
-Common Crawl archives.
+service-side metadata index first, then retrieves only the selected [WARC](https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1-annotated/) object.
+The client uses the service API and does not download complete Common Crawl
+archives.
 
 ## Architecture
 
@@ -28,13 +29,13 @@ ccwget.py
     v
 CIRCL Common Crawl service
     |
-    +--> ClickHouse metadata index
+    +--> metadata index
     +--> object cache
 ```
 
 The service performs metadata searches and controls object access. Depending on
 the token mode and cache state, the service either returns the object or asks
-the client to retrieve the WARC byte range directly from
+the client to retrieve the [WARC](https://iipc.github.io/warc-specifications/specifications/warc-format/warc-1.1-annotated/) byte range directly from
 `https://data.commoncrawl.org/`. Repeated retrievals can use the service-side
 object cache.
 
@@ -57,6 +58,18 @@ export CCWGET_TOKEN="your-token"
 
 `CCWGET_CLIENT_CONFIG` selects another configuration file. Keep live tokens
 outside version control.
+
+## Access
+
+Access to the service is provided free of charge for eligible use cases. To
+request access credentials, please contact [info@circl.lu](mailto:info@circl.lu)
+with a short description of your intended use.
+
+Requests are reviewed individually so that access can be allocated responsibly
+and in line with available capacity, operational considerations, and the
+service's intended purpose. Providing access is at CIRCL's discretion and
+cannot be guaranteed; this approach helps maintain a reliable service for the
+whole community.
 
 ## Quick start
 
@@ -87,7 +100,7 @@ python ccwget.py -pdns www.circl.lu --alltime -O pdns.csv
 - FQDN and domain page listings with `--list-fqdn` and `--list-domain`.
 - FQDN enumeration below a domain with `--domain-enumeration`.
 - Substring search with field selectors `--fqdn`, `--path`, and `--query`.
-- SHA-1 lookup using Common Crawl Base32 or hexadecimal digests.
+- SHA-1 lookup using Base32 or hexadecimal digests.
 - Passive-DNS-style IP and observation ranges with `-pdns`.
 - Date selection with `--after`, `--before`, `--on`, `--at`, `--time-range`,
   `--year`, and `--alltime`.
@@ -106,8 +119,11 @@ writes CSV instead:
 - PDNS: `ip,first_seen,last_seen,fqdn`.
 
 URLs are always quoted in CSV output so query strings and commas remain valid.
-Existing output files are preserved with a numeric suffix. Use `-O -` to write
-a downloaded response or CSV listing to standard output.
+Listing results are printed to standard output by default. Use `-O file` to
+save a listing as CSV, or `-O -` to write that CSV to standard output. For
+download commands, `-O file` saves the response body and `-O -` writes it to
+standard output; without `-O`, the body is saved using a filename derived from
+the URL. Existing output files are preserved with a numeric suffix.
 
 ## Performance notes
 
@@ -127,8 +143,7 @@ python ccwget.py -v https://www.circl.lu/
 python ccwget.py -vv https://www.circl.lu/
 ```
 
-`Ctrl-C` requests cancellation of the active server-side job. Jobs can also
-be submitted asynchronously with `-async`, inspected with `-status`, resumed
+Jobs can be submitted asynchronously with `-async`, inspected with `-status`, resumed
 with `-result`, listed with `-jobs`, or cancelled with `-flush`.
 
 For command-by-command examples, see
