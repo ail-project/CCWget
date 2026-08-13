@@ -1,0 +1,3 @@
+# Client-only configuration. Keep the live file outside version control.
+service_url: "http://127.0.0.1:4321"
+token: "replace-with-client-token"

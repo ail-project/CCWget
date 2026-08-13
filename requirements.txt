@@ -1,0 +1,4 @@
+# Client runtime dependencies only.
+requests
+warcio
+PyYAML
