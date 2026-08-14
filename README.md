@@ -1,13 +1,11 @@
 # CCWget
 
 **Need a tool retrieve a 32Kb index.html through a dataset of 7.5PiB over more than a decade ??**
-
-CCWget is a lightweight Python client for searching and retrieving archived web
-objects from a CIRCL Common Crawl indexing service.
-
 <div align="center">
   <img src="assets/ccwget-logo-small.png" alt="CCWget logo" width="314">
 </div>
+CCWget is a lightweight Python client for searching and retrieving archived web
+objects from a CIRCL Common Crawl indexing service.
 
 ## Why CCWget exists
 
