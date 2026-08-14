@@ -2,4 +2,3 @@
 requests
 warcio
 PyYAML
-clickhouse-driver

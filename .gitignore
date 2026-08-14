@@ -150,7 +150,6 @@ activemq-data/
 .env
 .envrc
 .venv
-.bloomfilters/
 env/
 venv/
 ENV/
