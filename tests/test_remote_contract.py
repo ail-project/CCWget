@@ -645,7 +645,10 @@ def test_remote_status_traces_json_only_at_triple_verbose(
 
     output = capsys.readouterr().out
     assert "State: RUNNING" in output
-    assert captured["headers"] == {"Authorization": "Bearer client-token"}
+    assert captured["headers"] == {
+        "Authorization": "Bearer client-token",
+        "User-Agent": "CCWget Client",
+    }
     assert ("JSON response" in caplog.text) is expects_json
     assert ('"nested": [' in caplog.text) is expects_json
     assert "client-token" not in caplog.text

@@ -9,6 +9,8 @@ from typing import Any, Callable
 
 import requests
 
+USER_AGENT = "CCWget Client"
+
 CLIENT_ACTIONS = {
     "domain-enum",
     "enumerate-url",
@@ -134,6 +136,7 @@ class ServiceHttpClient:
         """
         headers = dict(kwargs.pop("headers", {}))
         headers["Authorization"] = f"Bearer {self.token}"
+        headers["User-Agent"] = USER_AGENT
         try:
             self.logger.debug("%s %s", method, endpoint)
             response = requests.request(
@@ -201,7 +204,9 @@ def request_json(
         RuntimeError: If the request fails or returns invalid JSON.
     """
     active_logger = logger or logging.getLogger(__name__)
-    headers = {"Authorization": f"Bearer {token}"} if token else {}
+    headers = {"User-Agent": USER_AGENT}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     try:
         active_logger.debug("GET %s", endpoint)
         response = requests.get(

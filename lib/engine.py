@@ -14,6 +14,8 @@ from typing import Any, Callable, Iterable, NamedTuple
 import requests
 from warcio.archiveiterator import ArchiveIterator
 
+from lib.http import USER_AGENT
+
 RequestApi = Callable[..., requests.Response]
 DirectFetch = Callable[[dict[str, Any]], tuple[bytes, str, str]]
 StreamReader = Callable[[requests.Response, int, str], bytes]
@@ -171,7 +173,10 @@ def fetch_warc_segment(
         requests.RequestException: If range request fails.
     """
     url = f"https://data.commoncrawl.org/{warc_filename}"
-    headers = {"Range": f"bytes={offset}-{offset + length - 1}"}
+    headers = {
+        "Range": f"bytes={offset}-{offset + length - 1}",
+        "User-Agent": USER_AGENT,
+    }
     response = requests.get(url, headers=headers, timeout=timeout)
     response.raise_for_status()
     return response.content
@@ -320,7 +325,10 @@ def direct_payload(
     length = int(entry["warc_record_length"])
     response = requests.get(
         f"https://data.commoncrawl.org/{filename}",
-        headers={"Range": f"bytes={offset}-{offset + length - 1}"},
+        headers={
+            "Range": f"bytes={offset}-{offset + length - 1}",
+            "User-Agent": USER_AGENT,
+        },
         timeout=timeout,
         stream=True,
     )

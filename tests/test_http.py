@@ -38,6 +38,25 @@ class Response:
         """Treat the default response double as a successful HTTP response."""
 
 
+def test_user_agent_is_ccwget_client(monkeypatch) -> None:
+    """Authenticated and compatibility requests identify the CCWget client."""
+    captured = []
+    response = Response({})
+
+    def fake_request(*_args, **kwargs):
+        captured.append(kwargs["headers"])
+        return response
+
+    monkeypatch.setattr(http.requests, "request", fake_request)
+    client = http.ServiceHttpClient("https://service.test", "secret-token")
+    client.request("/jobs")
+
+    monkeypatch.setattr(http.requests, "get", fake_request)
+    http.request_json("https://service.test", "/jobs", {}, token="secret-token")
+
+    assert all(headers["User-Agent"] == "CCWget Client" for headers in captured)
+
+
 def test_http_client_traces_json_only_when_enabled(monkeypatch, caplog) -> None:
     """JSON response tracing is opt-in and includes structured response data."""
     logger = logging.getLogger("test.http.trace")
@@ -142,4 +161,7 @@ def test_compatibility_request_sends_optional_bearer_token(monkeypatch) -> None:
     )
 
     assert result == {"minimum_year": 2013}
-    assert captured["headers"] == {"Authorization": "Bearer client-token"}
+    assert captured["headers"] == {
+        "Authorization": "Bearer client-token",
+        "User-Agent": "CCWget Client",
+    }
