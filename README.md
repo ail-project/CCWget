@@ -3,7 +3,9 @@
 CCWget is a lightweight Python client for searching and retrieving archived web
 objects from a CIRCL Common Crawl indexing service.
 
-<center><img src="assets/ccwget-logo.png" alt="CCWget logo" width="314"></center>
+<div align="center">
+  <img src="assets/ccwget-logo-small.png" alt="CCWget logo" width="314">
+</div>
 
 ## Why CCWget exists
 
