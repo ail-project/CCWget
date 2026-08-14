@@ -1,6 +1,6 @@
 # CCWget
 
-**Need a tool retrieve a 32Kb index.html through a dataset of 7.5PiB over more than a decade ??**
+**Need a tool to retrieve a 32 KB index.html from 7.5 PiB of data spanning more than a decade?**
 <div align="center">
   <img src="assets/ccwget-logo-small.png" alt="CCWget logo" width="314">
 </div>
