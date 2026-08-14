@@ -1,6 +1,7 @@
 # CCWget
 
-**Need a tool retrieve a 32Kb index.html through a dataset of 7.5PiB over more than a decade ??** 
+**Need a tool retrieve a 32Kb index.html through a dataset of 7.5PiB over more than a decade ??**
+
 CCWget is a lightweight Python client for searching and retrieving archived web
 objects from a CIRCL Common Crawl indexing service.
 
@@ -151,3 +152,8 @@ with `-result`, listed with `-jobs`, or cancelled with `-flush`.
 
 For command-by-command examples, see
 [documentation/customer-commands.md](documentation/customer-commands.md).
+
+
+## EU Funded Project
+
+HOPLITE is an EU-funded project to provide Law Enforcement Agencies (LEAs) and Judicial Authorities (JAs) with an intuitive platform for launching OSINT campaigns, receiving threshold-level incident alerts, and exchanging threat intelligence with trusted partners.
