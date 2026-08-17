@@ -124,19 +124,19 @@ class SearchProgress:
 
     @staticmethod
     def _format_since(value: str | None) -> str:
-        """Format compact date text as an ISO Python datetime.
+        """Format compact date text as an ISO calendar date.
 
         Args:
             value: Date as ``YYYYMMDD`` or already formatted text.
 
         Returns:
-            ISO datetime text at midnight, or an empty string when absent.
+            ISO date text, or an empty string when absent.
         """
         if not value:
             return ""
         compact = value.replace("-", "")
         if len(compact) == 8 and compact.isdigit():
-            return f"{compact[:4]}-{compact[4:6]}-{compact[6:]}T00:00:00"
+            return f"{compact[:4]}-{compact[4:6]}-{compact[6:]}"
         return value
 
     @staticmethod
@@ -358,6 +358,8 @@ def add_time_arguments(
     )
     container.add_argument(
         "--after",
+        "--since",
+        dest="after",
         type=validators.date,
         metavar="YYMMDD",
         help=argparse.SUPPRESS if hidden else "Include crawls on/after date",

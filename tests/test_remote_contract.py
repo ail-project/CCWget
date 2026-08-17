@@ -182,8 +182,8 @@ def test_default_progress_bar_has_twenty_blocks() -> None:
     assert "\r" in output
 
 
-def test_search_progress_prints_object_count_and_start_datetime() -> None:
-    """Standard progress includes object count and ISO start datetime."""
+def test_search_progress_prints_object_count_and_start_date() -> None:
+    """Standard progress includes object count and ISO start date."""
     remote = load_remote()
     stream = io.StringIO()
     progress = remote.LOCAL.SearchProgress(False, 0, stream, since="20240730")
@@ -191,7 +191,7 @@ def test_search_progress_prints_object_count_and_start_datetime() -> None:
     progress.update("RUNNING", completed=1, total=20, total_rows=12345)
 
     assert (
-        "5% Digging into 12,345 Objects since 2024-07-30T00:00:00" in stream.getvalue()
+        "5% Digging into 12,345 Objects since 2024-07-30" in stream.getvalue()
     )
 
 
@@ -203,7 +203,7 @@ def test_search_progress_prints_valid_zero_dataset_count() -> None:
 
     progress.update("RUNNING", completed=1, total=1, total_rows=0)
 
-    assert "100% Digging into 0 Objects since 2024-07-30T00:00:00" in stream.getvalue()
+    assert "100% Digging into 0 Objects since 2024-07-30" in stream.getvalue()
 
 
 def test_search_progress_does_not_fake_zero_when_count_unavailable() -> None:
@@ -215,7 +215,7 @@ def test_search_progress_does_not_fake_zero_when_count_unavailable() -> None:
     progress.update("RUNNING", completed=0, total=0)
 
     output = stream.getvalue()
-    assert "Digging into Objects since 2024-07-30T00:00:00" in output
+    assert "Digging into Objects since 2024-07-30" in output
     assert "Digging into 0 Objects" not in output
 
 
@@ -260,7 +260,7 @@ def test_final_progress_uses_backend_object_count() -> None:
     progress.finish("DONE", total=1, total_rows=1234)
 
     assert (
-        "100% Digging into 1,234 Objects since 2024-07-31T00:00:00" in stream.getvalue()
+        "100% Digging into 1,234 Objects since 2024-07-31" in stream.getvalue()
     )
 
 

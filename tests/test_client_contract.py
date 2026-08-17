@@ -41,6 +41,16 @@ def test_client_parser_keeps_local_search_options(monkeypatch) -> None:
     assert MODULE.common_params(args)["year"] == ""
 
 
+def test_client_parser_accepts_since_alias(monkeypatch) -> None:
+    """The since alias maps to the after date bound."""
+    monkeypatch.setattr(
+        "sys.argv", [str(CLIENT_PATH), "--since", "240101", "www.example.test"]
+    )
+    args = MODULE.parse_args()
+    assert args.after == "20240101"
+    assert MODULE.common_params(args)["after"] == "20240101"
+
+
 @pytest.mark.parametrize(
     "value",
     [
@@ -481,6 +491,7 @@ def test_client_time_help_groups_all_time_modifiers(monkeypatch, capsys) -> None
         in output
     )
     assert "--after YYMMDD" in output
+    assert "--since YYMMDD" in output
     assert "--before YYMMDD" in output
     assert "--on DATE_OR_TIME" in output
     assert "--at DATE_OR_TIME" in output
