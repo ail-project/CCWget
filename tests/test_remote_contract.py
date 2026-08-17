@@ -195,6 +195,25 @@ def test_search_progress_prints_object_count_and_start_date() -> None:
     )
 
 
+def test_search_progress_omits_backend_detail() -> None:
+    """Progress bar does not render table and page-row details."""
+    remote = load_remote()
+    stream = io.StringIO()
+    progress = remote.LOCAL.SearchProgress(False, 0, stream, since="20240817")
+
+    progress.update(
+        "RUNNING",
+        completed=2,
+        total=24,
+        total_rows=58403552305,
+        detail="table 2/24, page rows 0",
+    )
+
+    output = stream.getvalue()
+    assert "table 2/24, page rows 0" not in output
+    assert "8% Digging into 58,403,552,305 Objects since 2024-08-17" in output
+
+
 def test_search_progress_prints_valid_zero_dataset_count() -> None:
     """Progress renders zero when selected tables contain zero indexed rows."""
     remote = load_remote()

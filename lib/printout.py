@@ -177,7 +177,7 @@ class SearchProgress:
             completed: Completed physical-table count.
             total: Selected physical-table count.
             total_rows: Cached rows in selected physical tables.
-            detail: Optional backend page-progress detail.
+            detail: Optional backend page-progress detail retained for API compatibility.
         """
         if total_rows is not None and total_rows != self.dataset_rows:
             self.dataset_rows = total_rows
@@ -205,7 +205,7 @@ class SearchProgress:
                     suffix += f" since {self.since}"
             else:
                 suffix = f"{self.message} {count:,} Objects..."
-            text = f"{self._bar(completed, total)} {suffix} {detail}".rstrip()
+            text = f"{self._bar(completed, total)} {suffix}"
         if text == self.last_text:
             return
         display_width = max(PROGRESS_WIDTH, len(self.last_text), len(text))
@@ -775,7 +775,8 @@ def save_payload(payload: bytes, output_file: str, quiet: bool) -> None:
         quiet: Suppress save message when true.
     """
     if output_file == "-":
-        print(payload.decode(errors="replace"))
+        sys.stdout.buffer.write(payload)
+        sys.stdout.buffer.flush()
         return
     destination = get_unique_filename(output_file)
     if not quiet:

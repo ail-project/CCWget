@@ -3,6 +3,7 @@
 import base64
 from datetime import date
 import gzip
+import io
 import importlib.util
 import logging
 from pathlib import Path
@@ -49,6 +50,16 @@ def test_client_parser_accepts_since_alias(monkeypatch) -> None:
     args = MODULE.parse_args()
     assert args.after == "20240101"
     assert MODULE.common_params(args)["after"] == "20240101"
+
+
+def test_stdout_payload_preserves_exact_bytes(monkeypatch) -> None:
+    """The stdout output mode does not append a newline to payload bytes."""
+    binary_stdout = io.BytesIO()
+    monkeypatch.setattr(printout.sys, "stdout", SimpleNamespace(buffer=binary_stdout))
+
+    printout.save_payload(b"<html>\n</html>\n", "-", quiet=True)
+
+    assert binary_stdout.getvalue() == b"<html>\n</html>\n"
 
 
 @pytest.mark.parametrize(
