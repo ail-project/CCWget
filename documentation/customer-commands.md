@@ -45,25 +45,9 @@ export CCWGET_SERVICE_URL=http://127.0.0.1:4321
 export CCWGET_TOKEN="client-token-value"
 ```
 
-Submit without waiting, inspect one job, list retained jobs, or cancel active jobs owned by the configured token:
-
-```bash
-python ccwget.py -async https://example.org/
-python ccwget.py -status JOB_ID
-python ccwget.py -result JOB_ID
-python ccwget.py -jobs
-python ccwget.py -flush
-```
-
-`-jobs` displays only jobs submitted by the configured token, newest first. It shows safe status metadata without
-arguments, results, tokens, salts, or internal client IDs. Completed, failed, and cancelled jobs remain visible until
-normal server retention cleanup or `-result JOB_ID` consumes them. `-result` reports an active `WAITING`, `RUNNING`, or
-`CANCEL_REQUESTED` job immediately without waiting, fetching a result, or deleting the job. For terminal jobs, it
-renders or downloads the retained result, then removes the job. A failed render, download, or network request keeps a
-successful job available for retry. Reading a retained `ERROR` or `CANCELLED` state consumes it before reporting the
-error. Current output options such as `-q`, `-v`, `-i`, `-O`, and `-S` apply to the resumed command. `-status` never
-downloads a WARC object. `-flush` cancels both waiting work and the current running query for this token; it cannot
-affect another client ID.
+Asynchronous submission, status inspection, result resumption, and
+cancellation are documented in
+[async-jobs.md](async-jobs.md).
 
 
 Use `CCWGET_CLIENT_CONFIG` to select another YAML path. Keep the live file and token outside version control.
@@ -262,13 +246,12 @@ python ccwget.py -1 67df35fd332c2956c96771fd68a75680de5df4a4 --alltime --info
 SHA-1 search prints every matching occurrence as `YYYY-MM-DDTHH:MM:SS:sha1:url` and does not download payloads by
 default. Use `-d` or `-S` when WARC content or headers are required.
 
-Download every record matching hash:
+Download one payload matching hash. When several occurrences match, the first
+result returned by the service is downloaded:
 
 ```bash
 python ccwget.py -1 67df35fd332c2956c96771fd68a75680de5df4a4 -O matching-content.bin
 ```
-
-Multiple matches create suffixed files.
 
 ### Select search period
 

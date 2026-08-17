@@ -150,6 +150,8 @@ with `-result`, listed with `-jobs`, or cancelled with `-flush`.
 
 For command-by-command examples, see
 [documentation/customer-commands.md](documentation/customer-commands.md).
+For queued job workflows, see
+[documentation/async-jobs.md](documentation/async-jobs.md).
 
 
 ## EU Funded Project

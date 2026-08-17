@@ -943,12 +943,7 @@ def run(args: Any) -> None:
         if not entries and not args.quiet:
             print(f"No matching records found for digest {args.sha1}")
         if args.output:
-            save_csv_rows(
-                [occurrence_csv_row(entry) for entry in entries],
-                args.output,
-                ["timestamp", "digest", "url"],
-                args.quiet,
-            )
+            render(entries[:1], args)
             return
         if not args.quiet and not args.detail:
             for entry in entries:

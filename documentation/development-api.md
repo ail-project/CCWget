@@ -115,5 +115,11 @@ Search every indexed occurrence carrying that content SHA-1:
 ./ccwget.py -1 fcaaccd9c2334ec09f615d70dee7be3f591d1893 --alltime
 ```
 
-The SHA-1 query prints the same occurrence format and does not download the
-payload. Add `-O perdu-sha1.csv` to save `timestamp,digest,url` CSV output.
+Without `-O`, the SHA-1 query prints every matching occurrence and does not
+download payloads. With `-O`, only the first result returned by the service is
+downloaded:
+
+```bash
+./ccwget.py -1 fcaaccd9c2334ec09f615d70dee7be3f591d1893 \
+  --alltime -O perdu-content.bin
+```
