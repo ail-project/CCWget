@@ -17,9 +17,9 @@ from warcio.archiveiterator import ArchiveIterator
 from lib.http import USER_AGENT
 
 RequestApi = Callable[..., requests.Response]
-DirectFetch = Callable[[dict[str, Any]], tuple[bytes, str, str]]
+DirectFetch = Callable[[dict[str, Any]], tuple[bytes, str, str, bytes]]
 StreamReader = Callable[[requests.Response, int, str], bytes]
-CacheStore = Callable[[dict[str, Any], bytes, str, str], None]
+CacheStore = Callable[[dict[str, Any], bytes], None]
 
 
 class RemoteObjectContext(NamedTuple):
@@ -309,7 +309,7 @@ def direct_payload(
     entry: dict[str, Any],
     timeout: int = 300,
     logger: logging.Logger | None = None,
-) -> tuple[bytes, str, str]:
+) -> tuple[bytes, str, str, bytes]:
     """Download and decode a WARC range directly from Common Crawl.
 
     Args:
@@ -318,7 +318,7 @@ def direct_payload(
         logger: Optional download progress logger.
 
     Returns:
-        Payload bytes, WARC headers, and HTTP headers.
+        Payload bytes, WARC headers, HTTP headers, and original compressed WARC bytes.
     """
     filename = entry["warc_filename"]
     offset = int(entry["warc_record_offset"])
@@ -339,6 +339,7 @@ def direct_payload(
         record.content_stream().read(),
         str(record.rec_headers),
         str(record.http_headers or ""),
+        raw_bytes,
     )
 
 
@@ -371,10 +372,10 @@ def populate_remote_payload(
     )
     if response.status_code == 204:
         context.logger.info("downloading object directly from Common Crawl")
-        payload, warc_headers, http_headers = context.direct_fetch(entry)
+        payload, warc_headers, http_headers, raw_warc = context.direct_fetch(entry)
         if context.cache_store is not None:
             try:
-                context.cache_store(entry, payload, warc_headers, http_headers)
+                context.cache_store(entry, raw_warc)
             except RuntimeError as exc:
                 context.logger.warning("object cache update failed: %s", exc)
     else:

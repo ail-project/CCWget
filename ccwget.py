@@ -6,7 +6,6 @@
 
 from __future__ import annotations
 
-import base64
 from copy import copy
 from functools import partial
 import logging
@@ -661,28 +660,24 @@ def read_download(response: Any, total: int, label: str) -> bytes:
     return engine_read_download(response, total, label, LOGGER)
 
 
-def direct_payload(entry: dict[str, Any]) -> tuple[bytes, str, str]:
+def direct_payload(entry: dict[str, Any]) -> tuple[bytes, str, str, bytes]:
     """Download and decode a WARC range after a ``204`` object response.
 
     Args:
         entry: Search record containing WARC location fields.
 
     Returns:
-        Payload bytes, WARC headers, and HTTP headers.
+        Payload bytes, WARC headers, HTTP headers, and original compressed WARC bytes.
     """
     return engine_direct_payload(entry, REQUEST_TIMEOUT, LOGGER)
 
 
-def cache_payload(
-    entry: dict[str, Any], payload: bytes, warc_headers: str, http_headers: str
-) -> None:
+def cache_payload(entry: dict[str, Any], raw_warc: bytes) -> None:
     """Store a directly downloaded object in the server SQLite cache.
 
     Args:
         entry: Search record containing WARC location fields.
-        payload: Uncompressed WARC response body.
-        warc_headers: Parsed WARC record headers.
-        http_headers: Parsed HTTP response headers.
+        raw_warc: Original gzip-compressed Common Crawl WARC range.
 
     Raises:
         RuntimeError: If the server rejects the cache update.
@@ -693,20 +688,12 @@ def cache_payload(
         "length": entry["warc_record_length"],
         "capability": entry.get("object_capability", ""),
     }
-    headers = {
-        "Content-Type": "application/octet-stream",
-        "X-WARC-Headers": base64.b64encode(warc_headers.encode("utf-8")).decode(
-            "ascii"
-        ),
-        "X-HTTP-Headers": base64.b64encode(http_headers.encode("utf-8")).decode(
-            "ascii"
-        ),
-    }
+    headers = {"Content-Type": "application/warc"}
     request_api(
         "/getobject/cache",
         method="POST",
         params=params,
-        data=payload,
+        data=raw_warc,
         headers=headers,
     )
 

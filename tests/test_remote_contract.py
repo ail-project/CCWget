@@ -155,13 +155,16 @@ def test_remote_uses_status_to_select_download(monkeypatch, caplog) -> None:
         return Response()
 
     monkeypatch.setattr(remote, "request_api", fake_request_api)
-    monkeypatch.setattr(remote, "direct_payload", lambda _entry: (b"x", "", ""))
+    monkeypatch.setattr(
+        remote, "direct_payload", lambda _entry: (b"x", "", "", b"original-warc")
+    )
     caplog.set_level(logging.INFO)
     entry = {"warc_filename": "f", "warc_record_offset": 0, "warc_record_length": 1}
     remote.get_payload(entry)
     assert entry["warc_payload"]
     assert [call[0] for call in calls] == ["/getobject", "/getobject/cache"]
-    assert calls[1][1]["data"] == b"x"
+    assert calls[1][1]["data"] == b"original-warc"
+    assert calls[1][1]["headers"] == {"Content-Type": "application/warc"}
     assert "object request (0%)" in caplog.text
     assert "object request (0%%)" not in caplog.text
 

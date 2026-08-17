@@ -177,8 +177,9 @@ ip,first_seen,last_seen,fqdn
 
 `first_seen` and `last_seen` use ISO Python datetime format: `YYYY-MM-DDTHH:MM:SS`.
 
-Downloaded WARC response bodies are stored in the server SQLite object cache. A client-side (`L`) download uploads its
-payload after retrieval; later `L`, `S`, or local requests reuse the cached payload.
+Downloaded WARC records are stored in the server SQLite object cache. A client-side (`L`) cache miss downloads the range
+from Common Crawl, uses its decoded payload locally, and uploads the unchanged gzip-compressed WARC range; later `L`, `S`,
+or local requests reuse the cached object. An `S` cache miss is downloaded and cached by the server.
 
 IPv6 addresses are enclosed in brackets. Search-time modifiers apply normally:
 

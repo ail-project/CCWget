@@ -41,6 +41,11 @@ the client to retrieve the [WARC](https://iipc.github.io/warc-specifications/spe
 `https://data.commoncrawl.org/`. Repeated retrievals can use the service-side
 object cache.
 
+For an `L` token, a cache miss is downloaded directly by `ccwget.py`; the
+client then uploads the unchanged gzip-compressed WARC byte range so later
+`L` and `S` requests can reuse the server cache. For an `S` token, the server
+performs and caches the download on a miss.
+
 ## Install
 
 ```bash
