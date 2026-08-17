@@ -778,9 +778,9 @@ def save_payload(payload: bytes, output_file: str, quiet: bool) -> None:
         print(payload.decode(errors="replace"))
         return
     destination = get_unique_filename(output_file)
-    Path(destination).write_bytes(payload)
     if not quiet:
-        logging.info("Saved payload to %s", destination)
+        print(f"Saving {destination}")
+    Path(destination).write_bytes(payload)
 
 
 def format_instance(entry: dict[str, Any]) -> str:

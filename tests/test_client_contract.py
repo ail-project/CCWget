@@ -537,3 +537,13 @@ def test_output_section_titles_have_equal_width(capsys) -> None:
     assert {len(line) for line in titles} == {printout.SECTION_WIDTH}
     assert "Indexed record" in titles[0]
     assert lines[lines.index(titles[0]) + 1] == ""
+
+
+def test_save_payload_reports_destination_in_normal_mode(tmp_path, capsys) -> None:
+    """Normal payload downloads print their destination while quiet mode stays silent."""
+    destination = tmp_path / "index.html"
+
+    printout.save_payload(b"body", str(destination), quiet=False)
+
+    assert capsys.readouterr().out == f"Saving {destination}\n"
+    assert destination.read_bytes() == b"body"
