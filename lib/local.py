@@ -271,9 +271,9 @@ def configure_logging(quiet: bool, verbose: int = 0) -> None:
     """
     logging.basicConfig(
         level=(
-            logging.DEBUG
-            if verbose >= 2
-            else (logging.ERROR if quiet else logging.INFO)
+            logging.ERROR
+            if quiet or verbose == 0
+            else (logging.DEBUG if verbose >= 2 else logging.INFO)
         ),
         format="%(levelname)s: %(message)s",
     )
@@ -640,4 +640,3 @@ def main() -> None:
             raise SystemExit("Error: URL, -s, -l, -ld, -de, or -1 must be specified")
     except RuntimeError as exc:
         raise SystemExit(str(exc)) from exc
-
