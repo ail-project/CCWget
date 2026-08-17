@@ -132,8 +132,8 @@ python ccwget.py https://circl.lu/pub/tr-73/ -O -
 
 ### Save listing results as CSV
 
-For listing modes, `-O` writes a CSV file instead of printing the listing. Substring and FQDN listings use
-`timestamp,digest,url` columns; domain and FQDN enumeration use one `fqdn` or `url` column as appropriate.
+For listing modes, `-O` writes a CSV file instead of printing the listing. Substring, FQDN, and domain listings use
+`timestamp,digest,url` columns; domain enumeration uses one `fqdn` column.
 
 ```bash
 python ccwget.py -s circl --fqdn -O results.csv
@@ -205,7 +205,9 @@ python ccwget.py -async -pdns www.circl.lu --alltime
 By default, PDNS downloads one indexed WARC object per day, using the date encoded in the WARC filename. Use
 `--full` to download every matching object.
 
-### List URLs for domain and subdomains
+### List occurrences for domain and subdomains
+
+Default output uses `timestamp:digest:url`; add `-O file.csv` for CSV output.
 
 Long-running remote domain enumeration displays the queue state and refreshes the physical-table progress while the
 backend job remains RUNNING. Use `-q` to suppress progress output or `-v`/`-vv` for diagnostic logging.

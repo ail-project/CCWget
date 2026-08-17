@@ -469,7 +469,7 @@ def list_records(args: argparse.Namespace, endpoint: str, key: str) -> None:
     """
     value = args.list_fqdn if key == "fqdn" else args.list_domain
     params = common_params(args)
-    detailed = key == "fqdn" or args.detail
+    detailed = key in {"fqdn", "domain"} or args.detail
     params.update({key: value, "detail": str(detailed).lower(), "all": "true"})
     results = request_json(endpoint, params)
     if not results:
@@ -477,7 +477,7 @@ def list_records(args: argparse.Namespace, endpoint: str, key: str) -> None:
             print(f"No records found for {value}")
         return
     if args.output:
-        if key == "fqdn" and not args.detail:
+        if key in {"fqdn", "domain"} and not args.detail:
             save_csv_rows(
                 [occurrence_csv_row(entry) for entry in results],
                 args.output,
@@ -497,7 +497,7 @@ def list_records(args: argparse.Namespace, endpoint: str, key: str) -> None:
     for entry in results:
         if args.quiet:
             continue
-        if key == "fqdn" and not args.detail:
+        if key in {"fqdn", "domain"} and not args.detail:
             print(format_instance(entry))
         elif args.detail:
             output_entry(entry, args, show_url=True)

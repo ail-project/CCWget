@@ -383,7 +383,7 @@ def _render_occurrence_result(result: list[Any], args: Any) -> None:
 
 
 def _render_domain_listing(result: list[Any], args: Any) -> None:
-    """Print resumed domain page URLs.
+    """Print resumed domain page occurrences.
 
     Args:
         result: Domain listing records.
@@ -391,14 +391,14 @@ def _render_domain_listing(result: list[Any], args: Any) -> None:
     """
     if args.output:
         save_csv_rows(
-            [{"url": entry.get("url", "")} for entry in result],
+            [occurrence_csv_row(entry) for entry in result],
             args.output,
-            ["url"],
+            ["timestamp", "digest", "url"],
             args.quiet,
         )
     elif not args.quiet:
         for entry in result:
-            print(entry.get("url", ""))
+            print(LOCAL.format_instance(entry))
 
 
 def _render_detail_listing(result: list[Any], args: Any) -> None:
@@ -887,7 +887,7 @@ def run(args: Any) -> None:
             {
                 **common_args(args),
                 key: value,
-                "detail": str(key == "fqdn" or args.detail).lower(),
+                "detail": str(key in {"fqdn", "domain"} or args.detail).lower(),
                 "all": "true",
             },
             progress,
@@ -902,7 +902,7 @@ def run(args: Any) -> None:
                     list(entries[0]) if entries else [],
                     args.quiet,
                 )
-            elif key == "fqdn":
+            elif key in {"fqdn", "domain"}:
                 save_csv_rows(
                     [occurrence_csv_row(entry) for entry in entries],
                     args.output,
@@ -918,7 +918,7 @@ def run(args: Any) -> None:
                 )
         elif args.detail:
             render(entries, args, show_url=True)
-        elif key == "fqdn" and not args.quiet:
+        elif key in {"fqdn", "domain"} and not args.quiet:
             for entry in entries:
                 print(LOCAL.format_instance(entry))
         elif not args.quiet:

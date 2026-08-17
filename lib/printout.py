@@ -576,7 +576,10 @@ def build_client_parser(
         help="List all pages for given domain suffix (2 to 5 labels)",
     )
     parser.add_argument(
-        "-d", "--detail", action="store_true", help="Detailed output for listing modes"
+        "-d",
+        "--detail",
+        action="store_true",
+        help="Detailed index output for listing modes",
     )
     parser.add_argument(
         "-de",
