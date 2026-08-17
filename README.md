@@ -99,12 +99,12 @@ python ccwget.py -pdns www.circl.lu --alltime -O pdns.csv
 
 - Exact URL lookup, with optional `--all` retrieval of every occurrence.
 - Historical URL enumeration with `--enumerate`.
-- FQDN and domain page listings with `--list-fqdn` and `--list-domain`.
+- FQDN and domain occurrence listings with `--list-fqdn` and `--list-domain`.
 - FQDN enumeration below a domain with `--domain-enumeration`.
 - Substring search with field selectors `--fqdn`, `--path`, and `--query`.
 - SHA-1 lookup using Base32 or hexadecimal digests.
 - Passive-DNS-style IP and observation ranges with `-pdns`.
-- Date selection with `--after`, `--before`, `--on`, `--at`, `--time-range`,
+- Date selection with `--after`/`--since`, `--before`, `--on`, `--at`, `--time-range`,
   `--year`, and `--alltime`.
 
 Without an explicit timeframe, the client searches the previous two years.
@@ -116,7 +116,7 @@ Use `--alltime` when a full indexed-history search is intended.
 writes CSV instead:
 
 - URL occurrences: `timestamp,digest,url`.
-- Domain listings: `url`.
+- Domain listings: `timestamp,digest,url`.
 - FQDN enumeration: `fqdn`.
 - PDNS: `ip,first_seen,last_seen,fqdn`.
 

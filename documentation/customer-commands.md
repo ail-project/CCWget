@@ -140,6 +140,9 @@ python ccwget.py -s circl --fqdn -O results.csv
 python ccwget.py --list-domain lu -O domains.csv
 ```
 
+Domain listings print `timestamp:digest:url` by default, matching URL occurrence
+listings. Use `-d` for detailed index metadata.
+
 ### Show metadata without downloading WARC body
 
 ```bash
