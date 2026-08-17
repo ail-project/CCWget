@@ -21,26 +21,39 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from config import load_client_config
-from lib.engine import (
-    RemoteObjectContext,
-    aggregate_pdns_observations,
-    direct_payload as engine_direct_payload,
-    format_pdns_timestamp,
-    parse_pdns_observation,
-    populate_remote_payload,
-    read_download as engine_read_download,
-)
-from lib.http import ServiceHttpClient, parse_positive_interval
-from lib import local as LOCAL
-from lib.printout import (
-    occurrence_csv_row,
-    print_flush_result,
-    print_job_list,
-    print_job_status,
-    print_json_result,
-    save_csv_rows,
-)
+try:
+    from config import load_client_config
+    from lib.engine import (
+        RemoteObjectContext,
+        aggregate_pdns_observations,
+        direct_payload as engine_direct_payload,
+        format_pdns_timestamp,
+        parse_pdns_observation,
+        populate_remote_payload,
+        read_download as engine_read_download,
+    )
+    from lib.http import ServiceHttpClient, parse_positive_interval
+    from lib import local as LOCAL
+    from lib.printout import (
+        occurrence_csv_row,
+        print_flush_result,
+        print_job_list,
+        print_job_status,
+        print_json_result,
+        save_csv_rows,
+    )
+except ModuleNotFoundError as exc:
+    missing = exc.name or "a project dependency"
+    print(
+        f"Missing Python dependency: {missing}\n\n"
+        "Install the project virtual environment, then retry:\n"
+        "  python3 -m venv .venv\n"
+        "  .venv/bin/python -m pip install -r requirements.txt\n"
+        "  .venv/bin/python ccwget.py ...\n\n"
+        "Or activate it first with: source .venv/bin/activate",
+        file=sys.stderr,
+    )
+    raise SystemExit(1) from exc
 
 CLIENT_CONFIG = load_client_config()
 SERVICE_URL = CLIENT_CONFIG["service_url"]

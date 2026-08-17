@@ -289,44 +289,6 @@ python ccwget.py -l www.circl.lu --alltime
 
 Do not combine `--year` and `--alltime`; `--alltime` wins.
 
-## Direct development HTTP API
+## Development HTTP API
 
-These endpoints are development-only and currently unauthenticated.
-
-### Query URL metadata
-
-The host is matched exactly; an apex domain is never changed to or searched as its `www` variant. A URL with no
-explicit path is searched as the root path and matches records stored with either `/` or a NULL path.
-
-```bash
-curl --get http://127.0.0.1:4321/query \
-  --data-urlencode 'url=https://circl.lu/pub/tr-73/' \
-  --data-urlencode 'info_only=true'
-```
-
-### List FQDN
-
-```bash
-curl --get http://127.0.0.1:4321/list-fqdn \
-  --data-urlencode 'fqdn=www.circl.lu' \
-  --data-urlencode 'brief=true'
-```
-
-### List domain across all crawls
-
-```bash
-curl --get http://127.0.0.1:4321/list-domain \
-  --data-urlencode 'domain=.circl.lu' \
-  --data-urlencode 'alldataset=true' \
-  --data-urlencode 'all=true' \
-  --data-urlencode 'brief=true'
-```
-
-### Enumerate domain hosts
-
-```bash
-curl --get http://127.0.0.1:4321/domain-enum \
-  --data-urlencode 'domain=.circl.lu' \
-  --data-urlencode 'alldataset=true' \
-  --data-urlencode 'all=true'
-```
+See [development-api.md](development-api.md) for direct, unauthenticated development API endpoints.
