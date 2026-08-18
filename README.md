@@ -90,14 +90,18 @@ python ccwget.py https://www.circl.lu/ --info
 # List all indexed pages for one FQDN
 python ccwget.py --list-fqdn www.circl.lu
 
+# List all indexed FQDNs under a domain
+python ccwget.py --domain-enumeration .circl.lu
+
+# Extract passive-DNS observations
+python ccwget.py -pdns www.circl.lu --alltime -O pdns.csv
+
+# Searches can be slow: they scan the index, especially with --alltime.
 # Search URL substrings in the hostname field
 python ccwget.py -s circl --fqdn --alltime
 
 # Search by content digest
 python ccwget.py --sha1 67df35fd332c2956c96771fd68a75680de5df4a4 --alltime
-
-# Extract passive-DNS observations
-python ccwget.py -pdns www.circl.lu --alltime -O pdns.csv
 ```
 
 ## Search capabilities
