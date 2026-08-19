@@ -718,6 +718,7 @@ def test_build_async_request_preserves_passive_dns_action(monkeypatch) -> None:
     assert operation == "list-fqdn"
     assert arguments["fqdn"] == "www.example.test"
     assert arguments["_client_action"] == "pdns"
+    assert arguments["pdns_full"] == "false"
     assert arguments["info_only"] == "true"
     assert arguments["detail"] == "true"
 
@@ -944,6 +945,8 @@ def test_passive_dns_run_searches_metadata_before_rendering(monkeypatch) -> None
     assert calls[0][1]["fqdn"] == "www.example.test"
     assert calls[0][1]["detail"] == "true"
     assert calls[0][1]["info_only"] == "true"
+    assert calls[0][1]["_client_action"] == "pdns"
+    assert calls[0][1]["pdns_full"] == "false"
     assert calls[0][1]["year"] == "2026"
     assert rendered == records
 

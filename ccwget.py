@@ -286,6 +286,7 @@ def build_job_request(args: Any) -> tuple[str, dict[str, Any]]:
             "fqdn": args.pdns,
             "detail": "true",
             "info_only": "true",
+            "pdns_full": str(args.full).lower(),
             "all": "true",
         }
     if args.string_search:
@@ -800,6 +801,8 @@ def run(args: Any) -> None:
                 "fqdn": args.pdns,
                 "detail": "true",
                 "info_only": "true",
+                "_client_action": "pdns",
+                "pdns_full": str(args.full).lower(),
                 "limit": str(args.limit),
                 "all": "true",
             },
